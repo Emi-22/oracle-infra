@@ -38,9 +38,9 @@ variable "internet_gateway_A" {
 # Compute Instance
 ############################################
 
-data "oci_identity_availability_domain" "ad_1" {
+data "oci_identity_availability_domain" "ad_3" {
   compartment_id = var.compartment_id
-  ad_number      = 1
+  ad_number      = 3
 }
 
 data "oci_core_images" "arm_oracle_linux" {
