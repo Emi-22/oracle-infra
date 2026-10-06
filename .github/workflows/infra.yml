@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VAR_compartment_id: ${{ secrets.OCI_TENANCY_OCID }}
-      TF_VAR_compartment_name: ${{ vars.COMPARTMENT_NAME }}
     defaults:
       run:
         shell: bash

@@ -1,29 +1,12 @@
 variable "compartment_id" {
-  description = "The OCID of the compartment where resources will be created."
+  description = "The OCID of the root compartment where resources will be created."
   type        = string
 }
 
-variable "compartment_name" {
-  description = "The name of the compartment where resources will be created."
+variable "vcn_id" {
+  description = "The OCID of the existing VCN to use."
   type        = string
-}
-
-variable "compartment_description" {
-  description = "Compartment Description"
-  type        = string
-  default     = "test-compartment description"
-}
-
-############################################
-# VCN
-############################################
-
-variable "vcn1" {
-  description = "The details of VCN1."
-  default = {
-    cidr_blocks : ["10.23.0.0/20"]
-    display_name : "vcn01"
-  }
+  default     = "ocid1.vcn.oc1.iad.amaaaaaattqdboqaihrijho75k376cmitl4ss5quf5xbp4mlgdizndm7shfa"
 }
 
 ############################################
@@ -33,7 +16,7 @@ variable "vcn1" {
 variable "subnetA_pub" {
   description = "The details of the subnet"
   default = {
-    cidr_block : "10.23.11.0/24"
+    cidr_block : "10.0.11.0/24"
     display_name : "IC_pub_snet-A"
     is_public : true
     route_table : {
@@ -46,7 +29,7 @@ variable "subnetA_pub" {
 variable "internet_gateway_A" {
   description = "The details of the internet gateway"
   default = {
-    display_name : "IC_IG-A"
+    display_name : "Internet Gateway vcn-20250929-1433"
     ig_destination = "0.0.0.0/0"
   }
 }
