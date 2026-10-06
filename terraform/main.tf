@@ -1,29 +1,36 @@
-# main.tf
-locals {
-  cmpt_name_prefix = "A506"
-  time_f           = formatdate("HHmmss", timestamp())
+removed {
+  from = oci_identity_compartment.example_compartment
+
+  lifecycle {
+    destroy = false
+  }
 }
 
-############################################
-# Compartments
-############################################
-resource "oci_identity_compartment" "example_compartment" {
-  # Required
+removed {
+  from = oci_core_vcn.example_vcn
+
+  lifecycle {
+    destroy = false
+  }
+}
+
+removed {
+  from = oci_core_internet_gateway.the_internet_gateway
+
+  lifecycle {
+    destroy = false
+  }
+}
+
+data "oci_core_vcn" "existing" {
+  vcn_id = var.vcn_id
+}
+
+data "oci_core_internet_gateways" "existing" {
   compartment_id = var.compartment_id
-  description    = var.compartment_description
-  name           = "${local.cmpt_name_prefix}-${var.compartment_name}-${local.time_f}"
-}
-
-############################################
-# VCN
-############################################
-
-resource "oci_core_vcn" "example_vcn" {
-  #Required
-  compartment_id = oci_identity_compartment.example_compartment.id
-  cidr_blocks    = var.vcn1.cidr_blocks
-  #Optional
-  display_name = var.vcn1.display_name
+  display_name   = var.internet_gateway_A.display_name
+  vcn_id         = data.oci_core_vcn.existing.id
+  state          = "AVAILABLE"
 }
 
 ############################################
@@ -31,26 +38,17 @@ resource "oci_core_vcn" "example_vcn" {
 ############################################
 
 resource "oci_core_subnet" "subnetA_pub" {
-  #Required
-  compartment_id = oci_identity_compartment.example_compartment.id
-  vcn_id         = oci_core_vcn.example_vcn.id
-  cidr_block     = var.subnetA_pub.cidr_block
-  #Optional
+  compartment_id             = var.compartment_id
+  vcn_id                     = data.oci_core_vcn.existing.id
+  cidr_block                 = var.subnetA_pub.cidr_block
   display_name               = var.subnetA_pub.display_name
   prohibit_public_ip_on_vnic = !var.subnetA_pub.is_public
-  prohibit_internet_ingress  = !var.subnetA_pub.is_public
+  security_list_ids          = [data.oci_core_vcn.existing.default_security_list_id]
 }
 
 ############################################
 # Internet Gateways and NAT Gateways
 ############################################
-
-resource "oci_core_internet_gateway" "the_internet_gateway" {
-  compartment_id = oci_identity_compartment.example_compartment.id
-  vcn_id         = oci_core_vcn.example_vcn.id
-  display_name   = var.internet_gateway_A.display_name
-}
-
 
 ############################################
 # Route Tables
@@ -58,8 +56,8 @@ resource "oci_core_internet_gateway" "the_internet_gateway" {
 
 resource "oci_core_default_route_table" "the_route_table" {
   #Required
-  compartment_id             = oci_identity_compartment.example_compartment.id
-  manage_default_resource_id = oci_core_vcn.example_vcn.default_route_table_id
+  compartment_id             = var.compartment_id
+  manage_default_resource_id = data.oci_core_vcn.existing.default_route_table_id
   # Optional
   display_name = var.subnetA_pub.route_table.display_name
   dynamic "route_rules" {
@@ -67,7 +65,7 @@ resource "oci_core_default_route_table" "the_route_table" {
     content {
       destination       = var.internet_gateway_A.ig_destination
       description       = var.subnetA_pub.route_table.description
-      network_entity_id = oci_core_internet_gateway.the_internet_gateway.id
+      network_entity_id = data.oci_core_internet_gateways.existing.gateways[0].id
     }
   }
 }
@@ -77,7 +75,7 @@ resource "oci_core_default_route_table" "the_route_table" {
 # ############################################
 
 resource "oci_core_instance" "ic_pub_vm-A" {
-  compartment_id      = oci_identity_compartment.example_compartment.id
+  compartment_id      = var.compartment_id
   shape               = var.ic_pub_vm_A.shape.name
   availability_domain = data.oci_identity_availability_domain.ad_1.name
   display_name        = var.ic_pub_vm_A.display_name
