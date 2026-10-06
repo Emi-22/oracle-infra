@@ -1,0 +1,1 @@
+comparment_id = "ocid1.tenancy.oc1..aaaaaaaa54crrrxqkb7n66f36a6k6oye47qk6mnx6gz4w6vredmu76ne3okq"
