@@ -1,3 +1,3 @@
-output "comparment_id" {
-    value = "oci_identity_compartment.compartment.id"
+output "compartment_id" {
+    value = "oci_identity_compartment.example_compartment.id"
 }
