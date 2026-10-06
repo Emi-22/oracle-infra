@@ -46,7 +46,7 @@ data "oci_identity_availability_domain" "ad_1" {
 data "oci_core_images" "arm_oracle_linux" {
   compartment_id   = var.compartment_id
   operating_system = "Oracle Linux"
-  shape            = "VM.Standard.A1.Flex"
+  shape            = "VM.Standard.E2.1.Micro"
   sort_by          = "TIMECREATED"
   sort_order       = "DESC"
 }
@@ -57,9 +57,9 @@ variable "ic_pub_vm_A" {
     display_name : "IC_pub_vm-A"
     assign_public_ip : true
     shape : {
-      name          = "VM.Standard.A1.Flex"
+      name          = "VM.Standard.E2.1.Micro"
       ocpus         = 1
-      memory_in_gbs = 8
+      memory_in_gbs = 1
     }
     ssh_authorized_keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCuzY9AR7LiJN8EhHeG3qP9gWuf7IxUl+xDaf1gD/zvZjid4Uxa8fRjWkAkeRQGa1ZNBLjw7EH+zWpjqOlCg14eZqTUnNtmOzIfK/LmcSFNKmD2rGNryY8DQBH5cY94bZVasOA+lhxnaNOzJ0sDGrqeCrpqTWqGWZ2NZ/nxXSXTdescHYcz/lmEijRLGnxtI/ByWKufowPUQm9gA0x+DRqJk9mvT7i1ZHi9djbeVPJPZthn14Ppi5cjLIXtCrxTQUcALaCPkzcgAKen9KHlmNRfoW+hx8fRxC0RPZgYCAigqz3hktsnjr+n4pxkF+5e55ZJJYdAKQnaYbS5SVzegC9jNzyzxef8JmZqtrgTBo4dsvNdbw7iIn0/KGgK3xZNTR55L60kS4y4NPbVNhRey8ESjIRc2zoBycssLmVd8cp0a0iLdjXDH3PGLgfC0Ly3Tv7lmGLd27c3U7ndN6ldXxFJ9k7B9k6EibyoaQJM0fLX4eug1tGa6BaB3dwEyZgSUuM= fdurrani@AJTV3VGQF2.local"]
   }
