@@ -77,7 +77,7 @@ resource "oci_core_default_route_table" "the_route_table" {
 resource "oci_core_instance" "ic_pub_vm-A" {
   compartment_id      = var.compartment_id
   shape               = var.ic_pub_vm_A.shape.name
-  availability_domain = data.oci_identity_availability_domain.ad_1.name
+  availability_domain = data.oci_identity_availability_domain.ad_3.name
   display_name        = var.ic_pub_vm_A.display_name
 
   source_details {
